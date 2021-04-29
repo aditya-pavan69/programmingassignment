@@ -1,0 +1,58 @@
+Functions vs Variables
+The same principles apply regardless of the type of associated value — finding functions works exactly the same way as finding variables:
+Example:
+
+a <- function(x) 10 * x
+b <- function(){
+  a <- function(x) x + 10
+  a(12)
+}
+b() 
+Output:
+
+[1] 22
+A Fresh Start
+When a function is called, a new environment is created every time. Each acknowledgement is completely independent because a function cannot tell what happened when it was run last time.
+Example:
+
+a <- function(){
+  if(!exists("z"))
+  {
+    z <- 10
+  }
+  else
+  {
+    z <- z+10
+  }
+  z
+}
+a()
+Output:
+
+[1] 10
+Dynamic Lookup
+Lexical scoping controls where to look for values not when to look for them. R looks for the values when the function is executed not when it is created. The output of the function can be different depending on objects outside its environment.
+Example:
+
+g <- function() x^3
+x <- 10
+g() 
+Output:
+
+[1] 1000
+There is a function in R which is findGlobals() from codetools and it helps us to find all global variables being used in a function and lists all the external dependencies of a function. findGlobals() find the global variables and functions which are used by the closure.
+Example:
+
+aGlobal <- rnorm(10)
+bGlobal <- rnorm(10)
+  
+f <- function()
+{ 
+  a <- aGlobal
+  b <- bGlobal
+  plot(b ~ a)
+}
+codetools::findGlobals(f) 
+Output:
+
+[1] "{"       "~"       "<-"      "aGlobal" "bGlobal" "plot"
